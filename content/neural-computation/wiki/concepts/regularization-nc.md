@@ -71,7 +71,7 @@ Some implementations use $\sum \theta_j^2$ over everything for simplicity; other
 
 ## Connection to overfitting remedies
 
-Regularisation sits among several complementary overfitting fixes (see [[overfitting]]):
+Regularisation sits among several complementary overfitting fixes (see [[overfitting-nc|overfitting]]):
 
 - **More data** — attacks the cause (insufficient signal-to-noise).
 - **Smaller model** — reduces capacity directly.
@@ -92,7 +92,7 @@ The visual difference on a 2D classification problem is often striking — it ma
 
 ## Related
 
-- [[overfitting]] — the problem regularisation solves; sits alongside early stopping and more-data as remedies
+- [[overfitting-nc|overfitting]] — the problem regularisation solves; sits alongside early stopping and more-data as remedies
 - [[dropout]] — regularisation by randomly disabling neurons; common alternative/complement to L2
 - [[data-augmentation]] — regularisation by synthesising more training examples
 - [[gradient-descent-nc|gradient descent]] — the algorithm; regularisation just modifies the loss it minimises

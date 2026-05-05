@@ -29,6 +29,17 @@ $$\hat{\theta}_{\text{MLE}} = \arg\max_{\hat{\theta}} \; P(\text{data} \mid \hat
 
 MLE asks: "out of all possible parameter values, which one would have been most likely to produce the data we actually saw?"
 
+## Intuition: tuning knobs
+
+Think of every parameter as a **knob on a machine** that generates data. Each setting of the knobs produces a different distribution over outcomes — turn them one way and the machine tends to spit out high values, turn them another way and it produces tightly clustered values, and so on.
+
+We don't know the correct settings. What we *do* have is a pile of real observations. MLE is the procedure of **turning each knob until the machine, if run with those settings, would have been most likely to produce exactly the data we already see in front of us**.
+
+- For a single Gaussian with unknown mean, there is one knob: $\mu$. Sliding it left or right shifts the bell curve. The MLE setting is the one that places the bell so that the observed points sit, collectively, at the highest possible likelihood — which (for a Gaussian) turns out to be the sample mean.
+- For a neural network, there are millions of knobs — every weight and bias. Each configuration defines a different conditional distribution $P(y \mid x, \hat{\theta})$ over outputs. Training is the same idea at scale: keep adjusting the knobs until the network, viewed as a data-generating machine, assigns the highest possible probability to the training labels we actually observed.
+
+This is why MLE is the natural objective for optimisation: it gives a **principled criterion for which knob settings are "good"** — not "the ones that minimise some hand-picked error", but "the ones under which the observed data is least surprising". Gradient descent is then just the mechanical procedure for finding those knob settings; MLE tells us *what we are searching for* in the first place.
+
 ## Likelihood vs probability
 
 The expression $P(\text{data} \mid \hat{\theta})$ can be read in two directions, and the distinction matters:

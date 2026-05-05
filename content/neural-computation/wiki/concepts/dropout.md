@@ -73,8 +73,8 @@ So dropout is still alive and well, but where you put it depends on what other r
 
 ## Related
 
-- [[regularization]] — dropout sits alongside L2 weight decay, early stopping, and data augmentation as a regulariser
-- [[overfitting]] — the problem dropout solves
+- [[regularization-nc|regularization]] — dropout sits alongside L2 weight decay, early stopping, and data augmentation as a regulariser
+- [[overfitting-nc|overfitting]] — the problem dropout solves
 - [[normalization]] — batch normalisation is a partial substitute in CNNs
 - [[data-augmentation]] — another regulariser; the two are commonly stacked
 

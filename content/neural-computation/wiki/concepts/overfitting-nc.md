@@ -79,7 +79,7 @@ Several levers, usually used in combination:
 1. **More training data.** The single most reliable fix. A model with $N$ parameters overfits when training set size $\ll N$; adding examples increases the ratio of signal to noise.
 2. **Less powerful model.** Fewer parameters (shallower / narrower network, lower-degree polynomial) gives the model less room to memorise.
 3. **Early stopping.** Stop training before the model has had time to overfit (see below).
-4. **Regularisation.** Add an explicit penalty on weight magnitude to the loss. See [[regularization]].
+4. **Regularisation.** Add an explicit penalty on weight magnitude to the loss. See [[regularization-nc|regularization]].
 5. **[[dropout]]** — randomly disable neurons during training to prevent over-reliance on specific units.
 6. **[[data-augmentation]]** — synthesise extra training examples by applying label-preserving transformations.
 7. **[[transfer-learning]]** — start from weights pre-trained on a large dataset, dramatically reducing the effective data requirement.
@@ -103,7 +103,7 @@ Visually:
 
 ## Related
 
-- [[regularization]] — an explicit loss term that discourages overfitting
+- [[regularization-nc|regularization]] — an explicit loss term that discourages overfitting
 - [[dropout]] — randomly disable neurons during training; an alternative regulariser
 - [[data-augmentation]] — synthesise more training examples to reduce overfitting from a small dataset
 - [[transfer-learning]] — bypass the data-hunger problem by starting from pre-trained weights

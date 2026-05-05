@@ -67,7 +67,7 @@ But it's most powerful in computer vision, where natural invariances (translatio
 
 ## Augmentation as regularisation
 
-Data augmentation is a form of [[regularization]] — it reduces [[overfitting]] without an explicit penalty term. The mechanism is not "more data" in any literal sense (you didn't collect more), but rather "more diverse data": every augmentation forces the model to find features that are stable under that transformation, which by construction are more likely to generalise.
+Data augmentation is a form of [[regularization-nc|regularization]] — it reduces [[overfitting-nc|overfitting]] without an explicit penalty term. The mechanism is not "more data" in any literal sense (you didn't collect more), but rather "more diverse data": every augmentation forces the model to find features that are stable under that transformation, which by construction are more likely to generalise.
 
 In the regulariser hierarchy:
 
@@ -80,8 +80,8 @@ These stack — most modern training pipelines use several at once.
 
 ## Related
 
-- [[overfitting]] — the failure mode that augmentation combats
-- [[regularization]] — the broader category augmentation belongs to
+- [[overfitting-nc|overfitting]] — the failure mode that augmentation combats
+- [[regularization-nc|regularization]] — the broader category augmentation belongs to
 - [[dropout]] — another regulariser, attacking the problem from inside the network instead of from the data
 - [[transfer-learning]] — paired with augmentation when data is severely limited
 - [[shift-invariance-equivariance]] — translation augmentation reinforces what the architecture already approximately gives for free

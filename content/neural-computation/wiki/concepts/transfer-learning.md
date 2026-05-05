@@ -82,9 +82,9 @@ The phrase "standing on the shoulders of giants" is widely used; you download a 
 ## Related
 
 - [[convolutional-neural-network]] — ImageNet-trained CNNs are the canonical pre-trained models
-- [[overfitting]] — small datasets cause severe overfitting; transfer learning is one of the strongest mitigations
+- [[overfitting-nc|overfitting]] — small datasets cause severe overfitting; transfer learning is one of the strongest mitigations
 - [[data-augmentation]] — usually combined with transfer learning when target data is limited
-- [[regularization]] — fine-tuning with a small learning rate is a form of implicit regularisation against catastrophic forgetting
+- [[regularization-nc|regularization]] — fine-tuning with a small learning rate is a form of implicit regularisation against catastrophic forgetting
 - [[u-net]] — segmentation networks often use ImageNet-pretrained encoders as the contracting path
 
 ## Active Recall

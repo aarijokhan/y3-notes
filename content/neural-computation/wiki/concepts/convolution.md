@@ -100,10 +100,68 @@ This is what people mean when they call CNNs **end-to-end machine learning**: yo
 
 The single most important property of a convolution layer is that the **same kernel weights are reused at every spatial position** of the input. One kernel, applied everywhere. That's weight sharing.
 
-Two consequences flow from this one design choice:
+### Why an MLP is wasteful for images
 
-- **Massive parameter savings.** A $3 \times 3$ kernel is 9 numbers. Those 9 numbers are responsible for the response at every one of the (potentially millions of) output positions. Compare this to a fully connected layer, which would need a *separate* weight per (input pixel, output unit) pair — see the parameter comparison below.
-- **Translation equivariance.** Because the same detector is used at every position, a feature that activates the kernel at one location will activate it the same way at any other location. Move the cat ten pixels to the right and the cat-detector activations move ten pixels to the right too — automatically, without the network having to learn this relationship from data. See [[shift-invariance-equivariance]].
+Recall the chef analogy from [[multi-layer-perceptron]]. In a fully connected MLP, every chef in the next layer has their own recipe with one weight per pixel. For a $1000 \times 1000$ image fed into a hidden layer with $10^6$ chefs:
+
+- 1,000,000 ingredients on the counter (one per pixel)
+- 1,000,000 chefs, each with a recipe of length 1,000,000
+- Total weights: $10^{12}$ — one trillion
+
+The parameter count is only half the problem. The bigger issue is **the network has to learn the same thing many times over**. Train a chef who specialises in detecting a cat in the top-left, then move the cat to the centre — the top-left chef sees only background and learned nothing useful for this new image. A different chef has to learn cat-detection from scratch in each new position.
+
+This is wasteful because **a cat in the top-left and a cat in the centre look the same** — same edges, same curves, same textures. The MLP forces the network to rediscover this fact by example at every position, instead of building it into the architecture.
+
+### Two structural facts about images
+
+Images have two properties any sensible architecture should exploit:
+
+1. **Features are local.** Detecting an "edge" or a "corner" only needs a small neighbourhood — typically $3 \times 3$ or $5 \times 5$ pixels. The whole image is irrelevant for that decision.
+2. **Features are translation-invariant.** A horizontal edge looks the same whether it sits at the top or the bottom of the image. The detector for it doesn't change with position.
+
+These two facts together suggest a wildly different architecture: **one small chef whose recipe gets applied at every position of the image.**
+
+### One chef walking the image (= one convolution kernel)
+
+Forget the army of MLP chefs. Picture *one* chef with a tiny $3 \times 3$ recipe — 9 weights. Instead of looking at the whole image at once, they:
+
+1. Stand over a $3 \times 3$ patch (say the top-left corner).
+2. Apply their recipe to the 9 pixels they see — a dot product.
+3. Write down one number — "how strongly did my recipe activate here?"
+4. Step one pixel to the right.
+5. Repeat across the whole image.
+
+The chef produces a 2D output map: each cell records how much their recipe matched the patch at that position. The chef has **9 weights total** — *not* 9 per position. The same 9 weights are reused at every location. That's weight sharing, and the sliding-recipe operation is convolution.
+
+### What weight sharing buys you
+
+Four wins, all huge:
+
+1. **Massive parameter savings.** A $3 \times 3$ kernel is 9 numbers (or $9 \cdot D$ on a depth-$D$ input) — typically 9 orders of magnitude fewer than the FC alternative. (Concrete numbers in [[#Why this is so much cheaper than full connectivity]] below.)
+2. **The kernel becomes a feature detector.** A specific pattern of kernel weights responds to a specific pattern in the image. A recipe with "+1 on top, 0 in middle, -1 on bottom" lights up exactly where bright-above-dark-below transitions occur — i.e. horizontal edges. The output map answers *"where in the image does this feature appear?"*
+3. **Translation equivariance.** Because the same detector is used at every position, a feature that activates the kernel at one location activates it identically at any other. Move the cat ten pixels to the right and the activations move ten pixels to the right — automatically, without the network having to learn this from data. See [[shift-invariance-equivariance]].
+4. **Far more training signal per weight.** In an MLP, each weight only ever receives gradient signal from one (input pixel, neuron) pair. In a convolution, *every position* in every image contributes a gradient update to the *same* shared weight. One kernel weight effectively gets gradient signal from every spatial location of every training image — orders of magnitude more learning per parameter. This is why CNNs train successfully with far less data than equivalent MLPs would need.
+
+### One kernel detects one pattern — use many
+
+A single $3 \times 3$ kernel can only respond to one feature. Real images need many: horizontal edges, vertical edges, curves, dots, textures, colour blobs.
+
+The fix is **multiple kernels in parallel**. If the layer has $K$ kernels, that's $K$ chefs each scanning the whole image with their own recipe. Each produces a separate 2D output map. The layer's output is a stack of $K$ feature maps — shape $H \times W \times K$. This is what makes "convolution layer" a layer in the neural-network sense: an operation parameterised by $K$ filters that takes a 3D input volume and returns a 3D output volume.
+
+### Stacking layers → CNN
+
+The final step is to stack convolution layers. Layer 2's chefs don't have to look at raw pixels — they can look at **layer 1's feature maps**:
+
+- **Layer 1 chefs** see raw pixels → learn **low-level features** (edges, dots, simple textures).
+- **Layer 2 chefs** see layer 1's edge/dot maps → learn **mid-level features** (corners, simple shapes, textures).
+- **Layer 3 chefs** see layer 2's corner/texture maps → learn **parts** (eyes, wheels, leaves).
+- **Layer 4 chefs** see layer 3's part maps → learn **objects** (faces, cars, trees).
+
+Each layer applies the same primitive — a stack of shared small kernels scanning whatever is on the counter — but operates on progressively more abstract feature maps. The compositional hierarchy emerges naturally because every layer can build on the previous one's outputs. The chefs at every level still just do "weighted sum of nearby ingredients, then bake" — the only thing that changes is what the ingredients *mean*.
+
+A **convolutional neural network** is exactly this: stacked convolution layers with [[activation-functions]] between them, [[pooling]] for spatial downsampling, eventually feeding into a small fully connected classifier at the end. See [[convolutional-neural-network]] for the full architecture story.
+
+### The constrained-MLP view
 
 Weight sharing is also why convolution can be viewed as a **constrained MLP**: take a fully connected layer and force (i) most weights to be zero (local connectivity — only nearby input pixels contribute), and (ii) the remaining weights to be tied across spatial positions (weight sharing). The result is a convolution. The "constraint" encodes a prior — *features are local and the same features appear everywhere* — that perfectly matches how images work.
 

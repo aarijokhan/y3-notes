@@ -114,10 +114,21 @@ Modern conditional generative models (conditional diffusion, conditional VAEs) h
 > [!question]- The discriminator in a cGAN sees both the condition $x$ and the candidate $y$, instead of just $y$ alone. Why is this critical?
 > Without the condition, the discriminator could only check "is this $y$ a realistic-looking image?" — the generator could then learn to produce *any* realistic image regardless of $x$ (e.g. always output a beautiful brown handbag, regardless of which sketch was input) and still fool the discriminator. With the condition, the discriminator checks "is this $(x, y)$ a realistic *pair*?" — punishing the generator for outputs that don't match the input. The condition forces the generator to actually use $x$ as a constraint, not just as a starting noise source. This is what turns a generative model into a *conditional* one in the proper sense.
 
+## Sequence-to-sequence: the transformer as conditional GM
+
+For sequences, the canonical conditional generative model is the **encoder-decoder [[transformer]]**. The condition $x$ is the input sequence (English sentence, audio waveform, source code, …); the target $y$ is the output sequence (French translation, text transcript, etc.). The decoder learns the autoregressive posterior
+
+$$\hat{p}_\theta(y \mid x) = \prod_{i=1}^{|y|} \hat{p}_\theta(y_i \mid y_1, \ldots, y_{i-1}, x)$$
+
+— the chain-rule factorisation of the conditional, with each step parameterised by the decoder. The encoder's latent code carries $x$; the decoder's [[cross-attention|cross-attention]] sub-layer is the conduit through which $x$ enters every output step. Generation is [[autoregressive-model|autoregressive]]: sample one token at a time conditioned on $x$ and previously sampled tokens.
+
+This unifies machine translation, summarisation, speech-to-text (Whisper), and text-to-image text branches under one framing — all are "given $x$, sample $y$ from the learned posterior". The pix2pix-style cGAN handles the same problem for image $\to$ image; the transformer handles the same problem for sequence $\to$ sequence; conditional [[diffusion-model|diffusion]] handles it for noise $\to$ image conditioned on text. Different architectures, same conditional-generative framing.
+
 ## Connections
 
 - **Built on** [[generative-adversarial-network]] — cGAN is a conditional extension of the GAN framework; same min-max game, same losses, same training algorithm, with $x$ added as input to both networks.
 - **Built on** [[u-net]] — pix2pix's generator is a U-Net; the encoder-decoder + skip connections architecture is well-suited to image-to-image tasks where the output is structurally similar to the input.
 - **Built on** [[bayes-theorem]] — conditional GMs learn $\hat{p}_\theta(y \mid x) \approx p(y \mid x)$, a parameterised posterior.
+- **Implemented by** [[transformer]] for sequences — encoder-decoder transformers are the canonical conditional sequence-to-sequence GMs (translation, summarisation, speech-to-text).
 - **Family member of** [[generative-model]] — the conditional branch.
 - **Improvement over** [[loss-function|MSE regression]] for posterior estimation — regression converges to the conditional mean (blurry); generative models sample from the posterior (sharp, diverse).

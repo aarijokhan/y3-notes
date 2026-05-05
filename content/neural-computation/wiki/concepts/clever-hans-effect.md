@@ -83,7 +83,7 @@ The general principles:
 ## Connections
 
 - [[pretext-task]] — chromatic aberration was the canonical pretext-task Clever Hans.
-- [[overfitting]] — Clever Hans is overfitting to the *wrong feature*. The network fits the training distribution perfectly via a shortcut, then fails when the shortcut is absent. The standard defences against overfitting (regularisation, more data) help, but the deeper defence is dataset design — make sure the shortcut isn't there to be exploited.
+- [[overfitting-nc|overfitting]] — Clever Hans is overfitting to the *wrong feature*. The network fits the training distribution perfectly via a shortcut, then fails when the shortcut is absent. The standard defences against overfitting (regularisation, more data) help, but the deeper defence is dataset design — make sure the shortcut isn't there to be exploited.
 - [[data-augmentation]] — augmentations that break the shortcut (random colour drop, intensity perturbation, geometric jitter) are the most direct defence.
 - [[self-supervised-learning]] — particularly vulnerable, because pretext targets are easy to design carelessly and easy to "solve" by shortcut.
 - [[contrastive-learning]] — SimCLR's heavy colour-distortion augmentation is partly motivated by killing colour-statistics shortcuts in the contrastive objective.

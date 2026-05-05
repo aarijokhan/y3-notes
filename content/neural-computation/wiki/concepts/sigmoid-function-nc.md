@@ -96,7 +96,7 @@ The take-away:
 
 Geometrically: $z = \mathbf{w} \cdot \mathbf{x} + b$ measures distance from the boundary in units of $\|\mathbf{w}\|$. Doubling $\|\mathbf{w}\|$ doubles those distances, so the same input now lands twice as far from the boundary in the sigmoid's eye, and gets squashed harder toward 0 or 1.
 
-This also gives a different angle on [[regularization|weight decay]]: penalising $\|\mathbf{w}\|^2$ doesn't directly stop the model from finding the right boundary — it just stops the model from being *over-confident* about it. Smoother transitions mean more cautious predictions, which usually generalise better.
+This also gives a different angle on [[regularization-nc|weight decay]]: penalising $\|\mathbf{w}\|^2$ doesn't directly stop the model from finding the right boundary — it just stops the model from being *over-confident* about it. Smoother transitions mean more cautious predictions, which usually generalise better.
 
 ## Limitations
 

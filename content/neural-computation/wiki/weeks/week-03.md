@@ -12,8 +12,8 @@ concepts:
   - "[[computation-graph]]"
   - "[[backpropagation]]"
   - "[[softmax]]"
-  - "[[overfitting]]"
-  - "[[regularization]]"
+  - "[[overfitting-nc|overfitting]]"
+  - "[[regularization-nc|regularization]]"
 status: stable
 updated: 2026-04-24
 ---
@@ -130,7 +130,7 @@ Outputs are positive and sum to 1, so they're readable as $p(y = j \mid \mathbf{
 
 ## Once training works, generalisation becomes the real problem
 
-With backpropagation and softmax, you can now train arbitrarily deep networks for arbitrary numbers of classes. The next problem: the model might memorise the training set rather than learn generalisable patterns. This is [[overfitting]].
+With backpropagation and softmax, you can now train arbitrarily deep networks for arbitrary numbers of classes. The next problem: the model might memorise the training set rather than learn generalisable patterns. This is [[overfitting-nc|overfitting]].
 
 **Underfitting** — model too simple, can't even fit the training data.
 **Overfitting** — model too powerful, fits training data near-perfectly including the noise, fails on unseen data.
@@ -160,7 +160,7 @@ Each split has its own job and must not leak into another. **Training on the tes
 
 **Early stopping:** monitor validation loss during training. It drops initially (the model is learning useful patterns), reaches a minimum, then rises (the model starts memorising noise). Stop training at the minimum — those weights generalise best.
 
-**Regularisation** (specifically, [[regularization|weight decay]]): add an explicit penalty on weight magnitudes to the loss:
+**Regularisation** (specifically, [[regularization-nc|weight decay]]): add an explicit penalty on weight magnitudes to the loss:
 
 $$L(\boldsymbol{\theta}) = L_{\text{orig}}(\boldsymbol{\theta}) + \lambda \sum_j \theta_j^2$$
 
@@ -184,8 +184,8 @@ We now have the full training pipeline for deep networks:
 - [[computation-graph]] — DAG representation of a function as nodes (variables) and edges (operations)
 - [[backpropagation]] — efficient gradient computation via forward and backward passes over the graph
 - [[softmax]] — multi-class output activation producing a probability distribution
-- [[overfitting]] — the memorisation failure mode; paired with underfitting and the generalisation ideal
-- [[regularization]] — weight decay / L2 penalty to reduce effective model capacity
+- [[overfitting-nc|overfitting]] — the memorisation failure mode; paired with underfitting and the generalisation ideal
+- [[regularization-nc|regularization]] — weight decay / L2 penalty to reduce effective model capacity
 
 ## Connections
 

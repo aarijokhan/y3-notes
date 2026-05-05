@@ -181,7 +181,7 @@ This umbrella is **[[self-supervised-learning]]**: supervised learning where the
 - **Builds on** [[transfer-learning]]: AE pre-training + classifier fine-tuning is the same recipe as ImageNet pre-training + fine-tuning, but with a self-supervised pre-training objective rather than a supervised one. SimCLR is the modern incarnation — pre-train on unlabelled data, transfer to anything.
 - **Builds on** [[data-augmentation]]: SimCLR turns data augmentation from a regulariser into the *training signal itself*. The augmentations $\mathcal{T}$ define what the encoder is told to be invariant to.
 - **Builds on** [[convolutional-neural-network]]: the base encoder $f$ in SimCLR is a ResNet; convolutional autoencoders use the same conv layers we built in week 4 with [[upsampling]] in place of pooling for the decoder.
-- **Connects to** [[overfitting]]: Clever Hans is overfitting to the *wrong feature*. The model fits the training distribution perfectly via a shortcut, then fails when the shortcut isn't available (deployment on a new scanner, a different photographer, a clean dataset).
+- **Connects to** [[overfitting-nc|overfitting]]: Clever Hans is overfitting to the *wrong feature*. The model fits the training distribution perfectly via a shortcut, then fails when the shortcut isn't available (deployment on a new scanner, a different photographer, a clean dataset).
 
 ## Open questions
 

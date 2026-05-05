@@ -25,7 +25,7 @@ updated: 2026-04-26
 
 ## Where we left off
 
-Week 3 built the full training pipeline for arbitrary multi-layer networks: stack [[multi-layer-perceptron|perceptrons]] into layers, represent the network as a [[computation-graph]], compute gradients with [[backpropagation]], add [[regularization]] and [[overfitting|early stopping]] to keep the model honest. The architecture was always **fully connected** — every neuron in layer $\ell$ connected to every neuron in layer $\ell - 1$.
+Week 3 built the full training pipeline for arbitrary multi-layer networks: stack [[multi-layer-perceptron|perceptrons]] into layers, represent the network as a [[computation-graph]], compute gradients with [[backpropagation]], add [[regularization-nc|regularization]] and [[overfitting-nc|early stopping]] to keep the model honest. The architecture was always **fully connected** — every neuron in layer $\ell$ connected to every neuron in layer $\ell - 1$.
 
 That works fine for small inputs. It does *not* work for images.
 

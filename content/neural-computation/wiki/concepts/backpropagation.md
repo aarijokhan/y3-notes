@@ -21,6 +21,51 @@ updated: 2026-04-24
 
 Backpropagation solves both at once. It walks the [[computation-graph]] representing the network and computes *all* parameter gradients in two passes.
 
+## Simple picture: backprop in the kitchen
+
+A gentler way in, building on the chef analogy from [[multi-layer-perceptron]]: the forward pass took ingredients through layer after layer of chefs and ended with a final dish $\hat{y}$. The customer compares that dish to what they actually wanted ($y$) and lodges a single complaint score — **the loss**.
+
+Backpropagation is the procedure that turns that one complaint into a personalised correction for *every* chef's recipe in the kitchen. It answers one question:
+
+> **Whose recipe should change, in which direction, and by how much?**
+
+### Each chef has three knobs
+
+When the complaint reaches the output chef, they can do three things:
+
+1. **Adjust their bias** — a uniform seasoning shift.
+2. **Adjust their recipe (weights)** — use more of an ingredient that was already strong (high leverage), less of one that hurt the dish.
+3. **Wish the ingredients had been different** — they can't change the ingredients (those came from the previous layer), but they can record a wish list: *"I wish ingredient 1 had been higher, ingredient 2 lower."*
+
+The wish list is the gradient signal that travels backwards.
+
+### The wish list propagates layer by layer
+
+The previous layer's chefs are the ones who *produced* those ingredients. So:
+
+- Each previous-layer chef receives the wish lists from **everyone they fed** (because their dish became an ingredient for several downstream chefs). They sum the wishes — *"collectively, my dish should have been higher (or lower) by this much"*.
+- Knowing their target, that chef now turns their *own* three knobs: adjust bias, adjust their recipe, and produce a wish list for the chefs behind *them*.
+- That wish list gets passed back another layer.
+
+Repeat all the way to the input. By the time the recursion terminates, every weight in every chef's recipe knows exactly how it should change. This collected list of nudges is the gradient $\nabla L$ — exactly what [[gradient-descent-nc|gradient descent]] needs.
+
+### Why it's called *back*propagation
+
+| Direction | What flows | Why |
+|---|---|---|
+| **Forward** (input → output) | Data — ingredients become dishes layer by layer | Compute the prediction |
+| **Backward** (output → input) | Complaint — wish lists propagate through the kitchen in reverse | Tell every chef what to change |
+
+The same kitchen, walked in reverse — hence *back*-propagation.
+
+### Why it's efficient
+
+Naïve question: "how does this one weight affect the loss?" — would trace a forward path through every downstream chef. With millions of weights, the same paths get retraced over and over.
+
+Backprop's insight: when the wish list arrives at chef $X$, it already encodes *everything downstream of $X$*. **Each gradient is computed once and reused** for every weight that chef owns. The whole walk-back costs work proportional to the number of chefs, not the number of paths.
+
+That's why training a billion-parameter network is feasible at all.
+
 ## Intuition: what does a single training example *want*?
 
 Before the math, here's the framing that makes backprop click. Take an MLP trained to classify MNIST digits. Show it a hand-drawn "2". The network's output layer is 10 neurons (one per digit). At first, the output activations are random — say $(0.5, 0.8, 0.2, 1.0, 0.4, 0.6, 1.0, 0.0, 0.2, 0.1)$.
